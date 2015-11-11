@@ -1,0 +1,12 @@
+1:Valera:12313:asd
+2:Maga:23213:qwe
+3:Mamka:12312:gds
+4:Jora:123:basd
+5:Piska:1231:skadf
+6:Egorov:124764:shaverma
+7:Petrosyan:3583:Plov
+8:Lena:123534:Pol
+9:Evgen:17853:Kek
+10:Piruika:276342:porno
+11:Валера:23468:институт
+END
