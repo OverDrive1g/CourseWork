@@ -10,28 +10,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-DBMS::DBMS(){
-	ifstream foutEmpl("employees.txt");
-	if (foutEmpl.is_open()){
-		cout << "File 1 is alive" << endl;
-	}
-	else{
-		cout << "File 1 not found" << endl;
-		foutEmpl.open("employees.txt");
-	}
-	foutEmpl.close();
-
-	ifstream foutHB("handbook.txt");
-	if (foutHB.is_open()){
-		cout << "File 2 is alive" << endl;
-	}
-	else{
-		cout << "File 2 not found" << endl;
-		foutHB.open("handbook.txt");
-	}
-	foutHB.close();
-}
-
 void DBMS::reading(){
 	std::string buff;
 	ifstream finEmpl("employees.txt");
@@ -52,17 +30,26 @@ void DBMS::reading(){
 
 void DBMS::recording(){
 	std::string buff;
-	ofstream fout("employees.txt");
+	ofstream foutEmpl("employees.txt");
 	for (const auto &employee : empl) {
 		buff += intToString(employee.id) + ":";
 		buff += employee.secName + ":";
 		buff += intToString(employee.codePosition) + ":";
 		buff += employee.subdivision + ":";
 		buff += intToString(employee.hoursWorked);
-		fout << buff << "\n";
+		foutEmpl << buff << "\n";
 		buff = "";
 	}
-	fout << "END";
+	foutEmpl << "END";
+	ofstream foutHb("handbook.txt");
+	for (const auto &jobTile : hb) {
+		buff += intToString(jobTile.id) + ":";
+		buff += jobTile.jobTitle + ":";
+		buff += floatToString(jobTile.salary);
+		foutHb << buff << "\n";
+		buff = "";
+	}
+	foutHb << "END";
 }
 
 void DBMS::addEmpl(const std::string &record){
@@ -124,10 +111,16 @@ void DBMS::addHB(const std::string &record){
 }
 
 void DBMS::printEmpl(){
+	GotoXY(0,0);
+	system("cls");
 	for(const auto &employee : empl) { print(employee);}
+	system("pause");
+	system("cls");
 }
 
 void DBMS::addEmpl() {
+	system("cls");
+	GotoXY(0,0);
 	std::string	secName;
 	unsigned int codePosition;
 	std::string	subdivision;
@@ -142,7 +135,6 @@ void DBMS::addEmpl() {
 	cout << "Введите кол-во отработанных часов: ";
 	cin >> hoursWorked;
 	if (empl.empty()) {
-		cout << "ПУстой";
 		employee newEmpl(0, secName, codePosition, subdivision, hoursWorked);
 		empl.push_back(newEmpl);
 	}
@@ -150,19 +142,26 @@ void DBMS::addEmpl() {
 		employee newEmpl(empl.back().id+1, secName, codePosition, subdivision, hoursWorked);
 		empl.push_back(newEmpl);
 	}
+	system("cls");
 }
 
-void DBMS::deleteEmpl(unsigned int ID){
-
-	auto equal_to_our_id = [=](const employee &e) {return e.id == ID;};
+void DBMS::deleteEmpl(){
+	unsigned int id = 0;
+	cout << "Введите id";
+	cin >> id;
+	auto equal_to_our_id = [=](const employee &e) {return e.id == id;};
 	std::remove_if(empl.begin(), empl.end(), equal_to_our_id);
 }
 
-void DBMS::updateEmpl(unsigned int ID){
+void DBMS::updateEmpl(){
 	std::string	secName;
 	unsigned int codePosition;
 	std::string	subdivision;
 	unsigned int hoursWorked;
+
+	unsigned int id = 0;
+	cout << "Введите id";
+	cin >> id;
 
 	cout << "Введите измененное имя: ";
 	cin >> secName;
@@ -174,8 +173,8 @@ void DBMS::updateEmpl(unsigned int ID){
 	cin >> hoursWorked;
 	system("cls");
 
-	employee newEmployee(ID, secName, codePosition, subdivision, hoursWorked);
-	auto equal_to_our_id = [=](const employee &e) {return e.id == ID;};
+	employee newEmployee(id, secName, codePosition, subdivision, hoursWorked);
+	auto equal_to_our_id = [=](const employee &e) {return e.id == id;};
 	auto old_employee = std::find_if(empl.begin(), empl.end(), equal_to_our_id);
 
 	if (old_employee!=empl.end()){
@@ -200,26 +199,41 @@ void DBMS::addHB(){
 	cout << "Введите З/П в час: ";
 	cin >> salary;
 	system("cls");
-	jobInfo newJobInfo(hb.end()->id, jobTitle, salary);
-	hb.push_back(newJobInfo);
+	if (hb.empty()) {
+		jobInfo newJobInfo(0, jobTitle, salary);
+		hb.push_back(newJobInfo);
+	}
+	else {
+		jobInfo newJobInfo(hb.back().id + 1, jobTitle, salary);
+		hb.push_back(newJobInfo);
+	}
+	
 }
 
-void DBMS::deleteHB(unsigned int ID){
-	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == ID;};
+void DBMS::deleteHB(){
+	unsigned int id = 0;
+	cout << "Введите id";
+	cin >> id;
+
+	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == id;};
 	std::remove_if(hb.begin(), hb.end(), equal_to_our_id);
 }
 
-void DBMS::updateHB(unsigned int ID){
+void DBMS::updateHB(){
 
 	std::string	jobTitle;
 	float	Salary;
+
+	unsigned int id = 0;
+	cout << "Введите id";
+	cin >> id;
 
 	cout << "Введите название профессии: ";
 	cin >> jobTitle;
 	cout << "Введите З/П в час: ";
 	cin >> Salary;
-	jobInfo newJobInfo(ID,jobTitle, Salary);
-	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == ID;};
+	jobInfo newJobInfo(id,jobTitle, Salary);
+	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == id;};
 	auto old_jobInfo = std::find_if(hb.begin(), hb.end(), equal_to_our_id);
 
 	if (old_jobInfo != hb.end()) {

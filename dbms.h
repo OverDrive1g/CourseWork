@@ -13,24 +13,19 @@ private:
 	void						addEmpl(const std::string & word);
 	void						addHB(const std::string &word);
 public:
-	DBMS();
 
 	void						reading();
 	void						recording();
 
 	void						printEmpl();
 	void						addEmpl();
-	void						deleteEmpl(unsigned int ID);
-	void						updateEmpl(unsigned int ID);
+	void						deleteEmpl();
+	void						updateEmpl();
 
 	void						printHB();
 	void						addHB();
-	void						deleteHB(unsigned int ID);
-	void						updateHB(unsigned int ID);
-
-	auto getEndVec() {
-		return empl.end();
-	}
+	void						deleteHB();
+	void						updateHB();
 };
 
 #endif
