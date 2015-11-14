@@ -11,8 +11,8 @@ struct employee {
 	unsigned int 			hoursWorked = 0;
 
 	employee(unsigned int id, const std::string &secName, unsigned int codePosition,
-		const std::string &subdivision) :id(id), secName(secName), codePosition(codePosition),
-		subdivision(subdivision) {}
+		const std::string &subdivision, unsigned int hoursWorked) :id(id), secName(secName), codePosition(codePosition),
+		subdivision(subdivision), hoursWorked(hoursWorked) {}
 
 };
 void print(const employee &employee);

@@ -16,6 +16,7 @@ public:
 	DBMS();
 
 	void						reading();
+	void						recording();
 
 	void						printEmpl();
 	void						addEmpl();
@@ -26,6 +27,10 @@ public:
 	void						addHB();
 	void						deleteHB(unsigned int ID);
 	void						updateHB(unsigned int ID);
+
+	auto getEndVec() {
+		return empl.end();
+	}
 };
 
 #endif

@@ -14,7 +14,6 @@
 
 //
 // TODO перименовать пол€ во всех классах!!!!
-//		приху€рить GIT!!!
 //
 
 
@@ -23,6 +22,7 @@
 #include <sstream>
 #include <windows.h>
 #include <iostream> 
+#include <fstream>
 #include "DBMS.h"
 
 using std::cin;
@@ -37,6 +37,10 @@ int main(){
 	DBMS a;
 
 	a.reading();
-	a.printHB();
+	a.printEmpl();
+	a.addEmpl();
+	a.addEmpl();
+	a.addEmpl();
+	a.recording();
 	system("pause");
 }

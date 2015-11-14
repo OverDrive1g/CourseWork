@@ -2,8 +2,10 @@
 
 #include <algorithm>
 #include <iostream>
+#include "function.h"
 
 using std::ifstream;
+using std::ofstream;
 using std::cout;
 using std::cin;
 using std::endl;
@@ -48,12 +50,28 @@ void DBMS::reading(){
 	finHB.close();
 }
 
+void DBMS::recording(){
+	std::string buff;
+	ofstream fout("employees.txt");
+	for (const auto &employee : empl) {
+		buff += intToString(employee.id) + ":";
+		buff += employee.secName + ":";
+		buff += intToString(employee.codePosition) + ":";
+		buff += employee.subdivision + ":";
+		buff += intToString(employee.hoursWorked);
+		fout << buff << "\n";
+		buff = "";
+	}
+	fout << "END";
+}
+
 void DBMS::addEmpl(const std::string &record){
 
 	std::string	ID;
 	std::string	secName;
 	std::string	codePosition;
 	std::string	subdivision;
+	std::string hoursWorked;
 
 	int k = 0;
 	int j = 0;
@@ -72,8 +90,11 @@ void DBMS::addEmpl(const std::string &record){
 		else if (k == 3) {
 			subdivision += record[i];
 		}
+		else if (k == 4) {
+			hoursWorked += record[i];
+		}
 	}
-	employee newEmpl(std::stoi(ID), secName, std::stoi(codePosition), subdivision);
+	employee newEmpl(std::stoi(ID), secName, std::stoi(codePosition), subdivision, std::stoi(hoursWorked));
 	empl.push_back(newEmpl);
 }
 
@@ -106,33 +127,42 @@ void DBMS::printEmpl(){
 	for(const auto &employee : empl) { print(employee);}
 }
 
-void DBMS::addEmpl(){
+void DBMS::addEmpl() {
 	std::string	secName;
-	std::string	codePosition;
+	unsigned int codePosition;
 	std::string	subdivision;
+	unsigned int hoursWorked;
 
 	cout << "¬ведите им€: ";
 	cin >> secName;
 	cout << "¬ведите код должности: ";
 	cin >> codePosition;
-	cout << "¬веите подраздеение";
+	cout << "¬веите подраздеение: ";
 	cin >> subdivision;
-	employee newEmpl(empl.end()->id++, secName, std::stoi(codePosition), subdivision);
-	empl.push_back(newEmpl);
+	cout << "¬ведите кол-во отработанных часов: ";
+	cin >> hoursWorked;
+	if (empl.empty()) {
+		cout << "ѕ”стой";
+		employee newEmpl(0, secName, codePosition, subdivision, hoursWorked);
+		empl.push_back(newEmpl);
+	}
+	else{
+		employee newEmpl(empl.back().id+1, secName, codePosition, subdivision, hoursWorked);
+		empl.push_back(newEmpl);
+	}
 }
 
 void DBMS::deleteEmpl(unsigned int ID){
 
 	auto equal_to_our_id = [=](const employee &e) {return e.id == ID;};
 	std::remove_if(empl.begin(), empl.end(), equal_to_our_id);
-	//empl.pop_back();
-	
 }
 
 void DBMS::updateEmpl(unsigned int ID){
 	std::string	secName;
-	std::string	codePosition;
+	unsigned int codePosition;
 	std::string	subdivision;
+	unsigned int hoursWorked;
 
 	cout << "¬ведите измененное им€: ";
 	cin >> secName;
@@ -140,9 +170,11 @@ void DBMS::updateEmpl(unsigned int ID){
 	cin >> codePosition;
 	cout << "¬ведите измененное подразделение: ";
 	cin >> subdivision;
+	cout << "¬ведите кол-во отработанных часов: ";
+	cin >> hoursWorked;
 	system("cls");
 
-	employee newEmployee(ID, secName, std::stoi(codePosition), subdivision);
+	employee newEmployee(ID, secName, codePosition, subdivision, hoursWorked);
 	auto equal_to_our_id = [=](const employee &e) {return e.id == ID;};
 	auto old_employee = std::find_if(empl.begin(), empl.end(), equal_to_our_id);
 
@@ -151,7 +183,7 @@ void DBMS::updateEmpl(unsigned int ID){
 		cout << "»зменение успешно!" << endl;
 	}
 	else {
-		cout << "»зменение не удалось" << endl;
+		cout << "»зменение не удалось!" << endl;
 	}
 }
 
@@ -195,6 +227,6 @@ void DBMS::updateHB(unsigned int ID){
 		cout << "»зменение успешно!" << endl;
 	}
 	else {
-		cout << "»зменение не удалось" << endl;
+		cout << "»зменение не удалось!" << endl;
 	}
 }
