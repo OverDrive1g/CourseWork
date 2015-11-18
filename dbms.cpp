@@ -12,6 +12,7 @@ using std::endl;
 
 void DBMS::reading(){
 	std::string buff;
+
 	ifstream finEmpl("employees.txt");
 	finEmpl >> buff;
 	while (buff[0] != 'E'){
@@ -19,6 +20,7 @@ void DBMS::reading(){
 		finEmpl >> buff;
 	}
 	finEmpl.close();
+
 	ifstream finHB("handbook.txt");
 	finHB >> buff;
 	while (buff[0] != 'E'){
