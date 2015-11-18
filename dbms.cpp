@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <conio.h>
 #include "function.h"
 
 using std::ifstream;
@@ -21,13 +22,13 @@ void DBMS::reading(){
 	}
 	finEmpl.close();
 
-	ifstream finHB("handbook.txt");
-	finHB >> buff;
+	ifstream finHb("handbook.txt");
+	finHb >> buff;
 	while (buff[0] != 'E'){
-		addHB(buff);
-		finHB >> buff;
+		addHb(buff);
+		finHb >> buff;
 	}
-	finHB.close();
+	finHb.close();
 }
 
 void DBMS::recording(){
@@ -87,7 +88,7 @@ void DBMS::addEmpl(const std::string &record){
 	empl.push_back(newEmpl);
 }
 
-void DBMS::addHB(const std::string &record){
+void DBMS::addHb(const std::string &record){
 
 	std::string ID;
 	std::string	jobTitle;
@@ -123,126 +124,192 @@ void DBMS::printEmpl(){
 void DBMS::addEmpl() {
 	system("cls");
 	GotoXY(0,0);
-	std::string	secName;
-	unsigned int codePosition;
-	std::string	subdivision;
-	unsigned int hoursWorked;
 
-	cout << "Введите имя: ";
-	cin >> secName;
-	cout << "Введите код должности: ";
-	cin >> codePosition;
-	cout << "Ввеите подраздеение: ";
-	cin >> subdivision;
-	cout << "Введите кол-во отработанных часов: ";
-	cin >> hoursWorked;
+	employee newEmpl = creationEmployee();
+	
 	if (empl.empty()) {
-		employee newEmpl(0, secName, codePosition, subdivision, hoursWorked);
+		newEmpl.id = 0;
 		empl.push_back(newEmpl);
 	}
 	else{
-		employee newEmpl(empl.back().id+1, secName, codePosition, subdivision, hoursWorked);
+		newEmpl.id = empl.back().id + 1;
 		empl.push_back(newEmpl);
 	}
 	system("cls");
 }
 
 void DBMS::deleteEmpl(){
-	unsigned int id = 0;
-	cout << "Введите id";
-	cin >> id;
-	auto equal_to_our_id = [=](const employee &e) {return e.id == id;};
-	std::remove_if(empl.begin(), empl.end(), equal_to_our_id);
-}
-
-void DBMS::updateEmpl(){
-	std::string	secName;
-	unsigned int codePosition;
-	std::string	subdivision;
-	unsigned int hoursWorked;
-
-	unsigned int id = 0;
-	cout << "Введите id";
-	cin >> id;
-
-	cout << "Введите измененное имя: ";
-	cin >> secName;
-	cout << "Введите измененный код должности: ";
-	cin >> codePosition;
-	cout << "Введите измененное подразделение: ";
-	cin >> subdivision;
-	cout << "Введите кол-во отработанных часов: ";
-	cin >> hoursWorked;
 	system("cls");
 
-	employee newEmployee(id, secName, codePosition, subdivision, hoursWorked);
-	auto equal_to_our_id = [=](const employee &e) {return e.id == id;};
-	auto old_employee = std::find_if(empl.begin(), empl.end(), equal_to_our_id);
+	std::vector<employee>::iterator i = empl.begin();
+	
+	int key;
 
-	if (old_employee!=empl.end()){
-		*old_employee = newEmployee;
-		cout << "Изменение успешно!" << endl;
-	}
-	else {
-		cout << "Изменение не удалось!" << endl;
+	while (true){
+		system("cls");
+		cout << i;
+		cout << "Управление: \n <- предыдуща запись\n -> следущая запись\n Enter Удалить\n Esc Вернуться в меню";
+		key = _getch();
+		if (key == 13) {
+			empl.erase(i);
+			continue;
+		}
+		else if (key == 52) {
+			if (i > empl.begin()) i--;
+			else continue;
+		}
+		else if (key == 54) {
+			if (i < empl.end()-1) i++;
+			else continue;
+		}
+		else if (key == 27) {
+			return;
+		}
 	}
 }
 
-void DBMS::printHB(){
+void DBMS::updateEmpl() {
+	system("cls");
+
+	std::vector<employee>::iterator i = empl.begin();
+
+	int key;
+
+	while (true) {
+		system("cls");
+		cout << i;
+		cout << "Управление: \n <- предыдуща запись\n -> следущая запись\n Enter Выбрать\n Esc Вернуться в меню";
+		key = _getch();
+		if (key == 13) {
+			system("cls");
+			employee newEmployee = creationEmployee();
+			system("cls");
+
+			newEmployee.id = i->id;
+
+			auto equal_to_our_id = [=](const employee &e) {return e.id == i->id;};
+			auto old_employee = std::find_if(empl.begin(), empl.end(), equal_to_our_id);
+
+			if (old_employee != empl.end()) {
+				*old_employee = newEmployee;
+				cout << "Изменение успешно!" << endl;
+			}
+			else {
+				cout << "Изменение не удалось!" << endl;
+			}
+
+			continue;
+		}
+		else if (key == 52) {
+			if (i > empl.begin()) i--;
+			else continue;
+		}
+		else if (key == 54) {
+			if (i < empl.end() - 1) i++;
+			else continue;
+		}
+		else if (key == 27) {
+			return;
+		}
+
+	}
+}
+
+void DBMS::printHb(){
+	system("cls");
 	for (const auto &jobTile : hb) { print(jobTile); }
+	system("pause");
 }
 
-void DBMS::addHB(){
-	std::string	jobTitle;
-	float salary;
+void DBMS::addHb(){
+	system("cls");
+	
+	jobInfo newJobInfo = creationJobInfo();
 
-	cout << "Введите наименование профессии: ";
-	cin >> jobTitle;
-	cout << "Введите З/П в час: ";
-	cin >> salary;
 	system("cls");
 	if (hb.empty()) {
-		jobInfo newJobInfo(0, jobTitle, salary);
+		newJobInfo.id = 0;
 		hb.push_back(newJobInfo);
 	}
 	else {
-		jobInfo newJobInfo(hb.back().id + 1, jobTitle, salary);
+		newJobInfo.id = hb.back().id + 1;
 		hb.push_back(newJobInfo);
 	}
 	
 }
 
-void DBMS::deleteHB(){
-	unsigned int id = 0;
-	cout << "Введите id";
-	cin >> id;
+void DBMS::deleteHb(){
+	system("cls");
+	
+	std::vector<jobInfo>::iterator i = hb.begin();
 
-	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == id;};
-	std::remove_if(hb.begin(), hb.end(), equal_to_our_id);
+	int key;
+
+	while (true) {
+		system("cls");
+		cout << i;
+		cout << "Управление: \n <- предыдуща запись\n -> следущая запись\n Enter Удалить\n Esc Вернуться в меню";
+		key = _getch();
+		if (key == 13) {
+			hb.erase(i);
+			continue;
+		}
+		else if (key == 52) {
+			if (i > hb.begin()) i--;
+			else continue;
+		}
+		else if (key == 54) {
+			if (i < hb.end() - 1) i++;
+			else continue;
+		}
+		else if (key == 27) {
+			return;
+		}
+	}
 }
 
-void DBMS::updateHB(){
+void DBMS::updateHb(){
+	system("cls");
 
-	std::string	jobTitle;
-	float	Salary;
+	std::vector<jobInfo>::iterator i = hb.begin();
 
-	unsigned int id = 0;
-	cout << "Введите id";
-	cin >> id;
+	int key;
 
-	cout << "Введите название профессии: ";
-	cin >> jobTitle;
-	cout << "Введите З/П в час: ";
-	cin >> Salary;
-	jobInfo newJobInfo(id,jobTitle, Salary);
-	auto equal_to_our_id = [=](const jobInfo &e) {return e.id == id;};
-	auto old_jobInfo = std::find_if(hb.begin(), hb.end(), equal_to_our_id);
+	while (true) {
+		system("cls");
+		cout << i;
+		cout << "Управление: \n <- предыдуща запись\n -> следущая запись\n Enter Выбрать\n Esc Вернуться в меню";
+		key = _getch();
+		if (key == 13) {
+			system("cls");
+			
+			jobInfo newJobInfo = creationJobInfo();
 
-	if (old_jobInfo != hb.end()) {
-		*old_jobInfo = newJobInfo;
-		cout << "Изменение успешно!" << endl;
-	}
-	else {
-		cout << "Изменение не удалось!" << endl;
+			newJobInfo.id = i->id;
+
+			auto equal_to_our_id = [=](const jobInfo &e) {return e.id == i->id;};
+			auto old_jobInfo = std::find_if(hb.begin(), hb.end(), equal_to_our_id);
+
+			if (old_jobInfo != hb.end()) {
+				*old_jobInfo = newJobInfo;
+				cout << "Изменение успешно!" << endl;
+			}
+			else {
+				cout << "Изменение не удалось!" << endl;
+			}
+
+			continue;
+		}
+		else if (key == 52) {
+			if (i > hb.begin()) i--;
+			else continue;
+		}
+		else if (key == 54) {
+			if (i < hb.end() - 1) i++;
+			else continue;
+		}
+		else if (key == 27) {
+			return;
+		}
 	}
 }

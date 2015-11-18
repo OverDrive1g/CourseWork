@@ -11,7 +11,7 @@ private:
 	std::vector<employee>		empl;
 	std::vector<jobInfo>		hb;
 	void						addEmpl(const std::string & word);
-	void						addHB(const std::string &word);
+	void						addHb(const std::string &word);
 public:
 
 	void						reading();
@@ -22,10 +22,10 @@ public:
 	void						deleteEmpl();
 	void						updateEmpl();
 
-	void						printHB();
-	void						addHB();
-	void						deleteHB();
-	void						updateHB();
+	void						printHb();
+	void						addHb();
+	void						deleteHb();
+	void						updateHb();
 };
 
 #endif
