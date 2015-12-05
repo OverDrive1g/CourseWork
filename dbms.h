@@ -26,6 +26,8 @@ public:
 	void						addHb();
 	void						deleteHb();
 	void						updateHb();
+
+	void						printPayslip();
 };
 
 #endif

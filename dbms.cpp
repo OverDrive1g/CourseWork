@@ -313,3 +313,14 @@ void DBMS::updateHb(){
 		}
 	}
 }
+
+void DBMS::printPayslip(){
+	system("cls");
+	std::string subdivision;
+	cin >> subdivision;
+	system("cls");
+	for (const auto &employee : empl) {
+		if(employee.subdivision == subdivision)	print(employee);
+	}
+	system("pause");
+}
